@@ -1,6 +1,7 @@
 FROM openhd/2018-10-09-raspbian-stretch-lite:v1  
 
 COPY . /data/
+COPY .git /data/.git/
 
 RUN apt update
 
