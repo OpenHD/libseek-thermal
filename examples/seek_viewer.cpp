@@ -22,8 +22,6 @@
 using namespace cv;
 using namespace LibSeek;
 
-const std::string WINDOW_NAME = "SeekThermal";
-
 // Setup sig handling
 static volatile sig_atomic_t sigflag = 0;
 
@@ -68,11 +66,6 @@ void process_frame(Mat &inframe, Mat &outframe, float scale, int colormap, int r
 
 void key_handler(char scancode) {
     switch (scancode) {
-        case 'f': {
-            int windowFlag = getWindowProperty(WINDOW_NAME, WindowPropertyFlags::WND_PROP_FULLSCREEN) == cv::WINDOW_FULLSCREEN ? cv::WINDOW_NORMAL : cv::WINDOW_FULLSCREEN;
-            setWindowProperty(WINDOW_NAME, WindowPropertyFlags::WND_PROP_FULLSCREEN, windowFlag);
-            break;
-        }
         case 's': {
             waitKey(0);
             break;
@@ -138,7 +131,7 @@ int main(int argc, char** argv) {
     // Setup arguments for parser
     args::ArgumentParser parser("Seek Thermal Viewer");
     args::HelpFlag help(parser, "help", "Display this help menu", {'h', "help"});
-    args::ValueFlag<std::string> _mode(parser, "mode", "The mode to use - v4l2, window, file", {'m', "mode"});
+    args::ValueFlag<std::string> _mode(parser, "mode", "The mode to use - v4l2, file", {'m', "mode"});
     args::ValueFlag<std::string> _output(parser, "output", "Name of the file or video device to write to", {'o', "output"});
     args::ValueFlag<std::string> _ffc(parser, "FFC", "Additional Flat Field calibration - provide ffc file", {'F', "FFC"});
     args::ValueFlag<int> _fps(parser, "fps", "Video Output FPS - Kludge factor", {'f', "fps"});
@@ -170,7 +163,7 @@ int main(int argc, char** argv) {
     if (_scale)
         scale = args::get(_scale);
 
-    std::string mode = "window";
+    std::string mode = "v4l2";
     if (_mode)
         mode = args::get(_mode);
 
@@ -259,10 +252,6 @@ int main(int argc, char** argv) {
         }
 
         std::cout << "Video stream created, dimension: " << outframe.cols << "x" << outframe.rows << ", fps:" << fps << std::endl;
-    } else if (mode == "window") {
-        namedWindow(WINDOW_NAME, cv::WINDOW_NORMAL);
-        setWindowProperty(WINDOW_NAME, WindowPropertyFlags::WND_PROP_ASPECT_RATIO, cv::WINDOW_KEEPRATIO);
-        resizeWindow(WINDOW_NAME, outframe.cols, outframe.rows);
     }
 
 
@@ -280,16 +269,6 @@ int main(int argc, char** argv) {
 
         if (mode == "v4l2") {
             v4l2_out(v4l2, outframe);
-        } else if (mode == "window") {
-            imshow(WINDOW_NAME, outframe);
-            char c = waitKey(10);
-            key_handler(c);
-
-            // If the window is closed by the user all window properties will return -1 and we should terminate
-            if (getWindowProperty(WINDOW_NAME, WindowPropertyFlags::WND_PROP_FULLSCREEN) == -1) {
-                std::cout << "Window closed, exiting" << std::endl;
-                return 0;
-            }
         } else {
             writer << outframe;
         }
