@@ -19,7 +19,7 @@ nameserver 8.8.4.4
 EOF
 fi
 
-apt -y install cmake libusb-1.0-0-dev libopencv-dev libboost-program-options-dev
+./install_dep.sh || exit 1
 
 PACKAGE_NAME=libseek-thermal
 
