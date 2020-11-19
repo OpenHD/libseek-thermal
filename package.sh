@@ -37,6 +37,7 @@ cmake ../
 make clean || exit 1
 make || exit 1
 cp -a examples/seek_viewer ${TMPDIR}/usr/local/bin/ || exit 1
+cp -a examples/seek_create_flat_field ${TMPDIR}/usr/local/bin/ || exit 1
 cp -a src/libseek.so ${TMPDIR}/usr/local/lib/ || exit 1
 cp -a src/libseek_static.a ${TMPDIR}/usr/local/lib/ || exit 1
 
