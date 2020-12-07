@@ -56,9 +56,23 @@ VERSION=$(git describe)
 
 rm ${PACKAGE_NAME}_${VERSION//v}_${PACKAGE_ARCH}.deb > /dev/null 2>&1
 
+
+if [[ "${OS}" == "raspbian" ]] && [[ "${DISTRO}" == "stretch" ]]; then
+    PLATFORM_PACKAGES=("-d libopencv-imgproc2.4v5" "-d libopencv-shape2.4v5" "-d libopencv-imgcodecs2.4v5" "-d libopencv-videoio2.4v5")
+fi
+
+if [[ "${OS}" == "raspbian" ]] && [[ "${DISTRO}" == "buster" ]]; then
+    PLATFORM_PACKAGES=("-d libopencv-imgproc3.2" "-d libopencv-shape3.2" "-d libopencv-imgcodecs3.2" "-d libopencv-videoio3.2" "-d libopencv-highgui3.2")
+fi
+
+if [[ "${OS}" == "ubuntu" ]] && [[ "${DISTRO}" == "bionic" ]]; then
+    PLATFORM_PACKAGES=("-d libopencv-imgproc3.2" "-d libopencv-shape3.2" "-d libopencv-imgcodecs3.2" "-d libopencv-videoio3.2" "-d libopencv-highgui3.2")
+fi
+
+
 fpm -a ${PACKAGE_ARCH} -s dir -t deb -n ${PACKAGE_NAME} -v ${VERSION//v} -C ${TMPDIR} \
   -p ${PACKAGE_NAME}_VERSION_ARCH.deb \
-  -d "libopencv-dev" \
+  "${PLATFORM_PACAKGES[@]}" \
   -d "libusb-1.0-0 >= 1.0" || exit 1
 
 
