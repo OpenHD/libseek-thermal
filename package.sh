@@ -29,6 +29,7 @@ rm -rf ${TMPDIR}/*
 
 mkdir -p ${TMPDIR}/usr/local/bin || exit 1
 mkdir -p ${TMPDIR}/usr/local/lib || exit 1
+mkdir -p ${TMPDIR}/etc/systemd/system || exit 1
 mkdir -p ${TMPDIR}/usr/local/include/seek || exit 1
 mkdir -p build
 
@@ -36,6 +37,7 @@ pushd build
 cmake ../
 make clean || exit 1
 make || exit 1
+
 cp -a examples/seek_viewer ${TMPDIR}/usr/local/bin/ || exit 1
 cp -a examples/seek_create_flat_field ${TMPDIR}/usr/local/bin/ || exit 1
 cp -a src/libseek.so ${TMPDIR}/usr/local/lib/ || exit 1
@@ -49,6 +51,8 @@ cp -a ../src/SeekThermal.h ${TMPDIR}/usr/local/include/seek/ || exit 1
 cp -a ../src/SeekThermalPro.h ${TMPDIR}/usr/local/include/seek/ || exit 1
 
 popd
+
+cp -a seekthermal.service ${TMPDIR}/etc/systemd/system/ || exit 1
 
 VERSION=$(git describe)
 
