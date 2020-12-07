@@ -19,6 +19,8 @@
 #include <sys/ioctl.h>
 #endif
 
+#include <systemd/sd-daemon.h>
+
 using namespace cv;
 using namespace LibSeek;
 
@@ -254,7 +256,8 @@ int main(int argc, char** argv) {
         std::cout << "Video stream created, dimension: " << outframe.cols << "x" << outframe.rows << ", fps:" << fps << std::endl;
     }
 
-
+    sd_notify(0, "READY=1");
+    
     // Main loop to retrieve frames from camera and write them out
     while (!sigflag) {
 

@@ -2,7 +2,7 @@
 Description=seekthermal
 
 [Service]
-Type=simple
+Type=notify
 EnvironmentFile=/etc/openhd/seekthermal.conf
 ExecStart=/usr/local/bin/seek_viewer -m v4l2 -o ${DeviceNode} -f ${FPS} -c ${SeekColormap} -r ${SeekRotate} -t ${SeekModel}
 
