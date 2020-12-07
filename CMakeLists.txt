@@ -28,6 +28,8 @@ include (MacroLogFeature)
 
 find_package (LibUSB)
 
+find_package (SystemD REQUIRED)
+
 find_package (OpenCV REQUIRED)
 
 if (MSVC)
