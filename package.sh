@@ -73,6 +73,7 @@ fi
 fpm -a ${PACKAGE_ARCH} -s dir -t deb -n ${PACKAGE_NAME} -v ${VERSION//v} -C ${TMPDIR} \
   -p ${PACKAGE_NAME}_VERSION_ARCH.deb \
   "${PLATFORM_PACAKGES[@]}" \
+  -d "libsystemd0" \
   -d "libusb-1.0-0 >= 1.0" || exit 1
 
 
